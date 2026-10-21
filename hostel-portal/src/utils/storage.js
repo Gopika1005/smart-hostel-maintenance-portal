@@ -6,6 +6,7 @@ const KEYS = {
   SESSION: 'shmp_session',
   SEEDED: 'shmp_seeded_v1',
 }
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '')
 
 const nowISO = () => new Date().toISOString()
 
@@ -27,7 +28,9 @@ const PLACEHOLDER_IMG =
   )
 
 async function apiRequest(path, options = {}) {
-  const response = await fetch(`/api${path}`, {
+  if (!API_BASE_URL) throw new Error('API is not configured')
+
+  const response = await fetch(`${API_BASE_URL}/api${path}`, {
     headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
     ...options,
   })
